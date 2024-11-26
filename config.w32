@@ -1,0 +1,7 @@
+ARG_ENABLE('aspect', 'aspect support', 'no');
+
+if (PHP_ASPECT != 'no') {
+	AC_DEFINE('HAVE_ASPECT', 1, "Define to 1 if the PHP extension 'aspect' is available.");
+
+	EXTENSION('aspect', 'aspect.c', null, '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
+}
