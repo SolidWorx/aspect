@@ -1,18 +1,29 @@
+#include <zend_attributes.h>
+
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 54b0ffc3af871b189435266df516f7575c1b9675 */
+ * Stub hash: 7fe2851260165fea167af14286eceaf94f1a6699 */
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test1, 0, 0, IS_VOID, 0)
-ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_test2, 0, 0, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, str, IS_STRING, 0, "\"\"")
-ZEND_END_ARG_INFO()
 
-ZEND_FUNCTION(test1);
-ZEND_FUNCTION(test2);
 
-static const zend_function_entry ext_functions[] = {
-	ZEND_FE(test1, arginfo_test1)
-	ZEND_FE(test2, arginfo_test2)
+static const zend_function_entry class_Memoize_methods[] = {
 	ZEND_FE_END
 };
+
+static zend_class_entry *register_class_Memoize(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "Memoize", class_Memoize_methods);
+	class_entry = zend_register_internal_class_ex(&ce, NULL);
+	class_entry->ce_flags |= ZEND_ACC_FINAL|ZEND_ACC_NO_DYNAMIC_PROPERTIES;
+
+	zend_string *attribute_name_Attribute_class_Memoize_0 = zend_string_init_interned("Attribute", sizeof("Attribute") - 1, 1);
+	zend_attribute *attribute_Attribute_class_Memoize_0 = zend_add_class_attribute(class_entry, attribute_name_Attribute_class_Memoize_0, 1);
+	zend_string_release(attribute_name_Attribute_class_Memoize_0);
+	zval attribute_Attribute_class_Memoize_0_arg0;
+	ZVAL_LONG(&attribute_Attribute_class_Memoize_0_arg0, ZEND_ATTRIBUTE_TARGET_FUNCTION | ZEND_ATTRIBUTE_TARGET_METHOD);
+	ZVAL_COPY_VALUE(&attribute_Attribute_class_Memoize_0->args[0].value, &attribute_Attribute_class_Memoize_0_arg0);
+
+	return class_entry;
+}

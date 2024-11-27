@@ -1,10 +1,9 @@
 <?php
 
-/**
- * @generate-class-entries
- * @undocumentable
- */
+/** @generate-class-entries */
 
-function test1(): void {}
-
-function test2(string $str = ""): string {}
+/** @strict-properties */
+#[\Attribute(2 | 4)]
+final class Memoize
+{
+}
