@@ -1,0 +1,16 @@
+{
+  "name": "solidworx/aspect",
+  "type": "php-ext",
+  "license": "MIT",
+  "description": "PHP Aspect Extension",
+  "require": {
+    "php": "^8.0"
+  },
+  "replace": {
+    "ext-aspect": "*"
+  },
+  "php-ext": {
+    "extension-name": "ext-aspect",
+    "priority": 80
+  }
+}
