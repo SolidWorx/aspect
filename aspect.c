@@ -104,6 +104,23 @@ static void aspect_execute_ex(zend_execute_data *execute_data) {
     }
 
     if (func->common.attributes && zend_get_attribute_str(func->common.attributes, "memoize", sizeof("memoize") - 1)) {
+        if (func->common.fn_flags & ZEND_ACC_HAS_RETURN_TYPE) {
+            if (func->common.arg_info != NULL) {
+                zend_arg_info *ret_info = func->common.arg_info - 1;
+                if (ret_info != NULL) {
+                    zend_type return_type = ret_info->type;
+                    uint32_t type_mask = return_type.type_mask;
+
+                    if (type_mask & ((uint32_t)1 << IS_VOID) || type_mask & ((uint32_t)1 << IS_NEVER)) {
+                        // cannot memoize functions with void or never return types
+                        // @TODO: Should this be an error/exception?
+                        original_zend_execute_ex(execute_data);
+                        return;
+                    }
+                }
+            }
+        }
+
         handle_memoize_functions(execute_data);
         return;
     }
@@ -118,9 +135,18 @@ static void handle_memoize_functions(zend_execute_data *execute_data) {
 
     if (cached_value) {
         // Return the cached value
-        ZVAL_COPY(EX(return_value), cached_value);
+        if (EX(return_value)) {
+            ZVAL_COPY(EX(return_value), cached_value);
+        }
         zend_string_release(cache_key);
         return;
+    }
+
+    zval temp_return_value, *actual_return_value;
+    if (EX(return_value)) {
+        actual_return_value = EX(return_value);
+    } else {
+        actual_return_value = &temp_return_value;
     }
 
     // Call the original function
@@ -131,15 +157,14 @@ static void handle_memoize_functions(zend_execute_data *execute_data) {
         return;
     }
 
-    if (Z_TYPE_P(EX(return_value)) == IS_UNDEF) {
-        php_error_docref(NULL, E_WARNING, "Return value is undefined");
+    if (Z_TYPE_P(actual_return_value) == IS_UNDEF) {
         zend_string_release(cache_key);
         return;
     }
 
     // Cache the result if no exception or exit occurred
     zval cache_copy;
-    ZVAL_DUP(&cache_copy, EX(return_value));
+    ZVAL_DUP(&cache_copy, actual_return_value);
 
     if (zend_hash_add(&ASPECT_G(memoize_cache), cache_key, &cache_copy) == NULL) {
         php_error_docref(NULL, E_WARNING, "Failed to add cache entry");
@@ -147,6 +172,7 @@ static void handle_memoize_functions(zend_execute_data *execute_data) {
         zend_string_release(cache_key);
         return;
     }
+
 
     zend_string_release(cache_key);
 }

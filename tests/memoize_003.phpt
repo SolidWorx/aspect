@@ -10,6 +10,7 @@ function bar() {
 
 #[Memoize]
 function foo() {
+    echo 'running foo'.PHP_EOL;
     return random_int(100, 200);
 }
 
@@ -21,6 +22,7 @@ var_dump($foo === foo());
 
 ?>
 --EXPECT--
+running foo
 bool(false)
 bool(true)
 bool(true)
