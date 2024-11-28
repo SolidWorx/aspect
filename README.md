@@ -17,7 +17,7 @@ Aspect is a PHP extension that provides a collection of utilities designed to en
 To install the Aspect extension, you can use [Pie](https://github.com/php/pie):
 
 ```bash
-pie install solidworx/ext-aspect
+pie install solidworx/aspect
 ```
 
 ## Features
