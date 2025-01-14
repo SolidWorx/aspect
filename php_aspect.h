@@ -6,7 +6,7 @@
 extern zend_module_entry aspect_module_entry;
 # define phpext_aspect_ptr &aspect_module_entry
 
-# define PHP_ASPECT_VERSION "0.1.0"
+# define PHP_ASPECT_VERSION "0.1.1"
 
 PHP_MINIT_FUNCTION(aspect);
 PHP_MSHUTDOWN_FUNCTION(aspect);
