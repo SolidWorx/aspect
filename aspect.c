@@ -28,7 +28,7 @@ ZEND_DECLARE_MODULE_GLOBALS(aspect)
 
 static void (*original_zend_execute_ex)(zend_execute_data *execute_data);
 
-ZEND_API static void aspect_execute_ex(zend_execute_data *execute_data);
+static void aspect_execute_ex(zend_execute_data *execute_data);
 
 static void handle_memoize_functions(zend_execute_data *execute_data);
 
@@ -111,7 +111,11 @@ static void aspect_execute_ex(zend_execute_data *execute_data) {
                     zend_type return_type = ret_info->type;
                     uint32_t type_mask = return_type.type_mask;
 
-                    if (type_mask & ((uint32_t)1 << IS_VOID) || type_mask & ((uint32_t)1 << IS_NEVER)) {
+                    if (type_mask & ((uint32_t)1 << IS_VOID)
+#if PHP_VERSION_ID >= 80100
+                        || type_mask & ((uint32_t)1 << IS_NEVER)
+#endif
+                    ) {
                         // cannot memoize functions with void or never return types
                         // @TODO: Should this be an error/exception?
                         original_zend_execute_ex(execute_data);
